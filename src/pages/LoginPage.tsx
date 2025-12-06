@@ -5,7 +5,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { signIn } from "../store/authSlice";
 import LoginPageIllustration from "../assets/LoginPageIllustration.png";
-import SocialAuthRow from "../components/SocialAuthRow";
+import SocialAuthRow from "../components/common/SocialAuthRow";
 
 const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
 

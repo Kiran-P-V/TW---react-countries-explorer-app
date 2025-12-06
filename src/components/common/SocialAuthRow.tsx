@@ -1,8 +1,8 @@
 import { Button } from "react-bootstrap";
-import GoogleIcon from "./icons/GoogleIcon";
-import FacebookIcon from "./icons/FacebookIcon";
-import LinkedInIcon from "./icons/LinkedInIcon";
-import TwitterIcon from "./icons/TwitterIcon";
+import GoogleIcon from "../icons/GoogleIcon";
+import FacebookIcon from "../icons/FacebookIcon";
+import LinkedInIcon from "../icons/LinkedInIcon";
+import TwitterIcon from "../icons/TwitterIcon";
 
 function SocialAuthRow() {
   return (
