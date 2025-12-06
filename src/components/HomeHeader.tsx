@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Nav, Stack } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { signOut } from "../store/authSlice";
 
 type RegionFilter = "All" | "Asia" | "Europe";
 
@@ -10,10 +12,15 @@ interface HomeHeaderProps {
 
 function HomeHeader({ filter, onFilterChange }: HomeHeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const dispatch = useDispatch();
 
   const handleFilterClick = (selectedFilter: RegionFilter) => {
     onFilterChange(selectedFilter);
     setIsMobileMenuOpen(false);
+  };
+
+  const handleLogout = () => {
+    dispatch(signOut());
   };
 
   return (
@@ -52,14 +59,19 @@ function HomeHeader({ filter, onFilterChange }: HomeHeaderProps) {
                 <Nav.Link
                   key={item}
                   onClick={() => handleFilterClick(item)}
-                  className={`p-0 text-decoration-none ${
+                  className={`p-0 text-decoration-none cursor-pointer ${
                     filter === item ? "text-dark fw-semibold" : "text-muted"
                   }`}
-                  style={{ cursor: "pointer" }}
                 >
                   {item}
                 </Nav.Link>
               ))}
+              <Nav.Link
+                onClick={handleLogout}
+                className="p-0 text-decoration-none text-danger fw-semibold cursor-pointer"
+              >
+                Logout
+              </Nav.Link>
             </Nav>
           </div>
         )}
@@ -70,22 +82,33 @@ function HomeHeader({ filter, onFilterChange }: HomeHeaderProps) {
         className="justify-content-between d-none d-md-flex"
       >
         <div className="fw-bold">Countries</div>
-        <Nav className="gap-4">
-          {(["All", "Asia", "Europe"] as RegionFilter[]).map((item) => (
-            <Nav.Link
-              key={item}
-              onClick={() => onFilterChange(item)}
-              className={`p-0 text-decoration-none ${
-                filter === item
-                  ? "text-dark fw-semibold border-bottom border-dark border-2"
-                  : "text-muted"
-              }`}
-              style={{ cursor: "pointer" }}
-            >
-              {item}
-            </Nav.Link>
-          ))}
-        </Nav>
+        <div className="d-flex gap-4">
+          <Nav className="gap-4">
+            {(["All", "Asia", "Europe"] as RegionFilter[]).map((item) => (
+              <Nav.Link
+                key={item}
+                onClick={() => onFilterChange(item)}
+                className={`p-0 text-decoration-none cursor-pointer ${
+                  filter === item
+                    ? "text-dark fw-semibold border-bottom border-dark border-2"
+                    : "text-muted"
+                }`}
+              >
+                {item}
+              </Nav.Link>
+            ))}
+          </Nav>
+          <div
+            className="border-end border-dark mx-2"
+            style={{ height: "24px", alignSelf: "center" }}
+          />
+          <Nav.Link
+            onClick={handleLogout}
+            className="p-0 text-decoration-none text-danger cursor-pointer"
+          >
+            Logout
+          </Nav.Link>
+        </div>
       </Stack>
     </div>
   );

@@ -28,7 +28,7 @@ function CountryCard({ name, region, flag }: CountryCardProps) {
                 style={{ fontSize: 20, lineHeight: 1 }}
                 aria-hidden
               >
-                🏳️
+                ❔
               </span>
             )}
           </div>

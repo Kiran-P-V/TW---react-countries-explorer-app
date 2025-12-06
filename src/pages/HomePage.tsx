@@ -1,61 +1,34 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button, Container, Spinner, Alert } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../store/store";
+import { fetchCountries } from "../store/countrySlice";
 import HomeHeader from "../components/HomeHeader";
 import WelcomeSection from "../components/WelcomeSection";
 import HeroCarousel from "../components/HeroCarousel";
 import CountryList from "../components/CountryList";
 import HomeFooter from "../components/HomeFooter";
-import type { CountryCardProps } from "../components/CountryCard";
 
 type RegionFilter = "All" | "Asia" | "Europe";
 
-const API_URL = "https://restcountries.com/v2/all?fields=name,region,flag";
 const PAGE_SIZE = 10;
 
-interface ApiCountry {
-  name?: { common?: string } | string;
-  region?: string;
-  flags?: { png?: string; svg?: string };
-  flag?: string;
-}
-
 function HomePage() {
-  const [countries, setCountries] = useState<CountryCardProps[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const {
+    items: countries,
+    status,
+    error,
+  } = useSelector((state: RootState) => state.countries);
+
   const [filter, setFilter] = useState<RegionFilter>("All");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   useEffect(() => {
-    const fetchCountries = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const res = await fetch(API_URL);
-        if (!res.ok) {
-          throw new Error("Failed to load countries");
-        }
-        const data: ApiCountry[] = await res.json();
-        const mapped: CountryCardProps[] = data
-          .map((item) => ({
-            name:
-              typeof item.name === "string"
-                ? item.name
-                : (item.name?.common ?? "Unknown"),
-            region: item.region ?? "Unknown",
-            flag: item.flags?.png ?? item.flags?.svg ?? item.flag,
-          }))
-          .sort((a, b) => a.name.localeCompare(b.name));
-        setCountries(mapped);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Unexpected error");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCountries();
-  }, []);
+    if (status === "idle") {
+      dispatch(fetchCountries());
+    }
+  }, [status, dispatch]);
 
   const filteredCountries = useMemo(() => {
     if (filter === "All") return countries;
@@ -86,7 +59,7 @@ function HomePage() {
 
       {error && <Alert variant="danger">{error}</Alert>}
 
-      {loading ? (
+      {status === "loading" ? (
         <div className="text-center py-5">
           <Spinner animation="border" role="status" />
         </div>

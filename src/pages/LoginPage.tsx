@@ -54,7 +54,7 @@ function LoginPage() {
                   validationSchema={validationSchema}
                   onSubmit={(values) => {
                     dispatch(signIn({ username: values.username }));
-                    navigate("/home");
+                    navigate("/");
                   }}
                 >
                   {({

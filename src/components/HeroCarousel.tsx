@@ -60,7 +60,6 @@ function HeroCarousel() {
             ))}
           </Carousel>
 
-          {/* Custom Controls */}
           <div
             className="position-absolute bottom-0 start-50 translate-middle-x mb-3 d-flex align-items-center gap-3 bg-white px-3 py-1 rounded-pill shadow-sm bg-opacity-75"
             style={{ zIndex: 10 }}
